@@ -83,7 +83,7 @@
 	<key>disabled</key>
 	<false/>
 	<key>name</key>
-	<string>Google Image Search (Grid View)</string>
+	<string>Inline Google Images Search</string>
 	<key>objects</key>
 	<array>
 		<dict>

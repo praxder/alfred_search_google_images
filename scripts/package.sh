@@ -22,7 +22,7 @@ rm -f "${OUT}"
 
 cd "${ROOT}"
 
-INCLUDES=(info.plist README.md icons workflow)
+INCLUDES=(info.plist icon.png README.md icons workflow)
 for path in "${INCLUDES[@]}"; do
   if [[ ! -e "${path}" ]]; then
     echo "error: missing required path: ${path}" >&2
