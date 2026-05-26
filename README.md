@@ -6,7 +6,7 @@ Alfred's Grid View. You bring your own Google API credentials.
 
 ## Features
 
-- `gimg <query>` — Search Google Images and pick a result from a grid of
+- `images <query>` — Search Google Images and pick a result from a grid of
   thumbnails.
 - **Enter** copies the selected image data to the macOS clipboard so you can
   paste it directly into another app.
@@ -73,7 +73,7 @@ debug logs) only see it through the script filter, not through every action.
 
 ## Using the workflow
 
-1. Trigger Alfred and type `gimg <query>`.
+1. Trigger Alfred and type `images <query>`.
 2. Wait for the grid to populate with image thumbnails.
 3. Use the following actions:
    - **Enter** — Download the selected image and copy its data to the
@@ -100,7 +100,7 @@ debug logs) only see it through the script filter, not through every action.
 ## API quota expectations
 
 - Google's Custom Search JSON API free tier allows **100 search queries per
-  day**. Each `gimg` query consumes one search call.
+  day**. Each `images` query consumes one search call.
 - Paid tiers are billed per 1,000 queries — see the Google Cloud pricing
   page for details.
 - When the daily limit is exceeded, the workflow shows an error item titled

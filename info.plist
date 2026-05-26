@@ -94,7 +94,7 @@
 				<key>argumenttype</key>
 				<integer>0</integer>
 				<key>keyword</key>
-				<string>gimg</string>
+				<string>images</string>
 				<key>subtext</key>
 				<string>Search Google Images and pick a result</string>
 				<key>text</key>
@@ -256,7 +256,7 @@
 Configure your Google Custom Search JSON API key and Programmable Search Engine ID in the workflow's configuration before use.
 
 Usage:
-  gimg &lt;query&gt;     Search Google Images and view results in Grid View
+  images &lt;query&gt;   Search Google Images and view results in Grid View
   Enter            Copy the selected image to the clipboard
   Shift+Enter      Open the direct image URL in your browser
   Cmd+Enter        Copy the direct image URL as text
