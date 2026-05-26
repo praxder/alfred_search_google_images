@@ -10,6 +10,32 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
+				<string>F6F6F6F6-6666-6666-6666-666666666666</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>F6F6F6F6-6666-6666-6666-666666666666</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>77777777-7777-7777-7777-777777777777</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>77777777-7777-7777-7777-777777777777</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
 				<string>B2B2B2B2-2222-2222-2222-222222222222</string>
 				<key>modifiers</key>
 				<integer>0</integer>
@@ -63,51 +89,81 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>alfredfiltersresults</key>
-				<false/>
-				<key>alfredfiltersresultsmatchmode</key>
-				<integer>0</integer>
-				<key>argumenttreatemptyqueryasnil</key>
-				<true/>
 				<key>argumenttrimmode</key>
 				<integer>0</integer>
 				<key>argumenttype</key>
 				<integer>0</integer>
-				<key>escaping</key>
-				<integer>102</integer>
 				<key>keyword</key>
 				<string>gimg</string>
-				<key>queuedelaycustom</key>
-				<integer>3</integer>
-				<key>queuedelayimmediatelyinitially</key>
+				<key>subtext</key>
+				<string>Search Google Images and pick a result</string>
+				<key>text</key>
+				<string>Search Google Images</string>
+				<key>withspace</key>
 				<true/>
-				<key>queuedelaymode</key>
-				<integer>0</integer>
-				<key>queuemode</key>
-				<integer>1</integer>
-				<key>runningsubtext</key>
-				<string>Searching Google Images…</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>A1A1A1A1-1111-1111-1111-111111111111</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
 				<key>script</key>
 				<string>/usr/bin/python3 -m workflow.search "$1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
 				<string></string>
-				<key>subtext</key>
-				<string>Search Google Images and pick a result</string>
-				<key>title</key>
-				<string>Search Google Images</string>
 				<key>type</key>
 				<integer>0</integer>
-				<key>withspace</key>
-				<true/>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.input.scriptfilter</string>
+			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
-			<string>A1A1A1A1-1111-1111-1111-111111111111</string>
+			<string>F6F6F6F6-6666-6666-6666-666666666666</string>
 			<key>version</key>
-			<integer>3</integer>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>columncount</key>
+				<integer>3</integer>
+				<key>filterable</key>
+				<false/>
+				<key>fixedorder</key>
+				<true/>
+				<key>imageaspect</key>
+				<integer>2</integer>
+				<key>inputfile</key>
+				<string></string>
+				<key>inputtype</key>
+				<integer>0</integer>
+				<key>loadingtext</key>
+				<string>Searching Google Images…</string>
+				<key>showsubtitles</key>
+				<true/>
+				<key>showtitles</key>
+				<true/>
+				<key>subtitlesinfooter</key>
+				<true/>
+				<key>titlesinfooter</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.userinterface.grid</string>
+			<key>uid</key>
+			<string>77777777-7777-7777-7777-777777777777</string>
+			<key>version</key>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -216,31 +272,45 @@ See README.md for full setup instructions.</string>
 			<key>ypos</key>
 			<integer>180</integer>
 		</dict>
-		<key>B2B2B2B2-2222-2222-2222-222222222222</key>
+		<key>F6F6F6F6-6666-6666-6666-666666666666</key>
+		<dict>
+			<key>xpos</key>
+			<integer>180</integer>
+			<key>ypos</key>
+			<integer>180</integer>
+		</dict>
+		<key>77777777-7777-7777-7777-777777777777</key>
 		<dict>
 			<key>xpos</key>
 			<integer>320</integer>
+			<key>ypos</key>
+			<integer>180</integer>
+		</dict>
+		<key>B2B2B2B2-2222-2222-2222-222222222222</key>
+		<dict>
+			<key>xpos</key>
+			<integer>460</integer>
 			<key>ypos</key>
 			<integer>40</integer>
 		</dict>
 		<key>C3C3C3C3-3333-3333-3333-333333333333</key>
 		<dict>
 			<key>xpos</key>
-			<integer>320</integer>
+			<integer>460</integer>
 			<key>ypos</key>
 			<integer>150</integer>
 		</dict>
 		<key>D4D4D4D4-4444-4444-4444-444444444444</key>
 		<dict>
 			<key>xpos</key>
-			<integer>320</integer>
+			<integer>460</integer>
 			<key>ypos</key>
 			<integer>260</integer>
 		</dict>
 		<key>E5E5E5E5-5555-5555-5555-555555555555</key>
 		<dict>
 			<key>xpos</key>
-			<integer>320</integer>
+			<integer>460</integer>
 			<key>ypos</key>
 			<integer>370</integer>
 		</dict>

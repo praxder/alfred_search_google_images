@@ -12,7 +12,7 @@ _FALLBACK_ICON = os.path.normpath(
 
 
 def render(items):
-    payload = {"view": "grid", "items": list(items)}
+    payload = {"items": list(items)}
     return json.dumps(payload, ensure_ascii=False)
 
 

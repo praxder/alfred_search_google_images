@@ -92,12 +92,12 @@ class RunTests(unittest.TestCase):
 
 
 class MainTests(unittest.TestCase):
-    def test_given_args_when_main_then_writes_grid_json_to_stdout(self):
+    def test_given_args_when_main_then_writes_json_to_stdout(self):
         out = io.StringIO()
         with patch("workflow.search.search_images", return_value=[]):
             main(argv=["search.py", "cats"], env=_full_env(), stdout=out)
         payload = json.loads(out.getvalue())
-        self.assertEqual(payload["view"], "grid")
+        self.assertNotIn("view", payload)
         self.assertEqual(len(payload["items"]), 1)
 
 

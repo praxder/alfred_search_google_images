@@ -91,8 +91,8 @@ class RenderTests(unittest.TestCase):
     def test_given_items_when_render_then_returns_valid_json_string(self):
         rendered = render([{"title": "x", "valid": False}])
         payload = json.loads(rendered)
-        self.assertEqual(payload["view"], "grid")
         self.assertEqual(payload["items"], [{"title": "x", "valid": False}])
+        self.assertNotIn("view", payload)
 
     def test_given_empty_items_when_render_then_returns_empty_items_array(self):
         rendered = render([])
