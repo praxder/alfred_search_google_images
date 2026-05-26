@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sys
+from concurrent.futures import ThreadPoolExecutor
 
 from workflow import alfred, cache
 from workflow.google import (
@@ -43,11 +44,11 @@ def run(query, env):
         return [alfred.empty_results_item(query)]
 
     cache_dir = cache.workflow_cache_dir()
-    items = []
-    for result in results:
-        icon_path = cache.fetch_thumbnail(result.thumbnail_url, cache_dir=cache_dir)
-        items.append(alfred.result_item(result, icon_path=icon_path))
-    return items
+    icon_paths = _fetch_thumbnails(results, cache_dir)
+    return [
+        alfred.result_item(result, icon_path=icon_path)
+        for result, icon_path in zip(results, icon_paths)
+    ]
 
 
 def main(argv=None, env=None, stdout=None):
@@ -58,6 +59,17 @@ def main(argv=None, env=None, stdout=None):
     query = argv[1] if len(argv) > 1 else ""
     items = run(query, env)
     stdout.write(alfred.render(items))
+
+
+def _fetch_thumbnails(results, cache_dir):
+    max_workers = min(8, len(results))
+    with ThreadPoolExecutor(max_workers=max_workers) as pool:
+        return list(
+            pool.map(
+                lambda r: cache.fetch_thumbnail(r.thumbnail_url, cache_dir=cache_dir),
+                results,
+            )
+        )
 
 
 def _split_names(message):

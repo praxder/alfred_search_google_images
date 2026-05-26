@@ -125,7 +125,7 @@ def _fetch_page(query, config, *, start, num, timeout):
         with urllib.request.urlopen(url, timeout=timeout) as resp:
             body = resp.read()
     except urllib.error.HTTPError as exc:
-        _raise_for_http_error(exc)
+        raise _http_error(exc) from exc
     except urllib.error.URLError as exc:
         raise ApiError(f"Network error: {exc.reason}") from exc
     try:
@@ -150,7 +150,7 @@ def _safe_int(value):
         return 0
 
 
-def _raise_for_http_error(exc):
+def _http_error(exc):
     body = b""
     with contextlib.suppress(Exception):
         body = exc.read()
@@ -167,7 +167,5 @@ def _raise_for_http_error(exc):
         except json.JSONDecodeError:
             pass
     if exc.code == 429 or reason in QUOTA_REASONS:
-        raise QuotaError(
-            message or "Google API quota exceeded", status=exc.code, reason=reason
-        ) from exc
-    raise ApiError(message or "Google API error", status=exc.code, reason=reason) from exc
+        return QuotaError(message or "Google API quota exceeded", status=exc.code, reason=reason)
+    return ApiError(message or "Google API error", status=exc.code, reason=reason)

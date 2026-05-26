@@ -61,15 +61,19 @@ class RunTests(unittest.TestCase):
         self.assertIn("flying squirrel", items[0]["subtitle"])
 
     def test_given_results_when_run_then_returns_grid_items_with_cached_icons(self):
+        thumb_to_path = {"https://t/a": "/cache/a.jpg", "https://t/b": "/cache/b.jpg"}
         with (
             patch(
                 "workflow.search.search_images",
-                return_value=[_result(), _result(image_url="https://example.com/2.jpg")],
+                return_value=[
+                    _result(thumbnail_url="https://t/a"),
+                    _result(image_url="https://example.com/2.jpg", thumbnail_url="https://t/b"),
+                ],
             ),
             patch("workflow.search.cache.workflow_cache_dir", return_value="/cache"),
             patch(
                 "workflow.search.cache.fetch_thumbnail",
-                side_effect=["/cache/a.jpg", "/cache/b.jpg"],
+                side_effect=lambda url, **_kw: thumb_to_path[url],
             ),
         ):
             items = run("cats", _full_env())
@@ -77,6 +81,36 @@ class RunTests(unittest.TestCase):
         self.assertEqual(items[0]["icon"]["path"], "/cache/a.jpg")
         self.assertEqual(items[1]["icon"]["path"], "/cache/b.jpg")
         self.assertEqual(items[0]["arg"], "https://example.com/cat.jpg")
+
+    def test_given_slow_thumbnails_when_run_then_preserves_result_order(self):
+        # Earlier results resolve slower than later ones; output order must still
+        # match the input order despite concurrent fetching.
+        import time
+
+        delays = {"https://t/0": 0.05, "https://t/1": 0.0}
+        results = [
+            _result(image_url="https://example.com/0.jpg", thumbnail_url="https://t/0"),
+            _result(image_url="https://example.com/1.jpg", thumbnail_url="https://t/1"),
+        ]
+
+        def slow_fetch(url, **_kw):
+            time.sleep(delays[url])
+            return f"/cache/{url[-1]}.jpg"
+
+        with (
+            patch("workflow.search.search_images", return_value=results),
+            patch("workflow.search.cache.workflow_cache_dir", return_value="/cache"),
+            patch("workflow.search.cache.fetch_thumbnail", side_effect=slow_fetch),
+        ):
+            items = run("cats", _full_env())
+        self.assertEqual(
+            [i["arg"] for i in items],
+            [
+                "https://example.com/0.jpg",
+                "https://example.com/1.jpg",
+            ],
+        )
+        self.assertEqual([i["icon"]["path"] for i in items], ["/cache/0.jpg", "/cache/1.jpg"])
 
     def test_given_thumbnail_fetch_fails_when_run_then_item_still_emitted_with_fallback(self):
         with (

@@ -18,8 +18,8 @@ class _FakeResponse:
     def __init__(self, body):
         self._body = body
 
-    def read(self):
-        return self._body
+    def read(self, amt=None):
+        return self._body if amt is None else self._body[:amt]
 
     def __enter__(self):
         return self
@@ -105,6 +105,25 @@ class FetchThumbnailTests(unittest.TestCase):
     def test_given_empty_url_when_fetch_then_returns_none(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = fetch_thumbnail("", cache_dir=tmp)
+            self.assertIsNone(path)
+
+    def test_given_non_http_scheme_when_fetch_then_returns_none_without_opening(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch("workflow.cache.urllib.request.urlopen") as opener:
+                path = fetch_thumbnail("file:///etc/passwd", cache_dir=tmp)
+            self.assertIsNone(path)
+            opener.assert_not_called()
+
+    def test_given_oversized_body_when_fetch_then_returns_none(self):
+        from workflow.cache import MAX_THUMBNAIL_BYTES
+
+        with tempfile.TemporaryDirectory() as tmp:
+            big = b"x" * (MAX_THUMBNAIL_BYTES + 1)
+            with patch(
+                "workflow.cache.urllib.request.urlopen",
+                return_value=_FakeResponse(big),
+            ):
+                path = fetch_thumbnail("https://x/big.png", cache_dir=tmp)
             self.assertIsNone(path)
 
 

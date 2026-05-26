@@ -7,9 +7,11 @@ import hashlib
 import os
 import tempfile
 import urllib.error
+import urllib.parse
 import urllib.request
 
 DEFAULT_TIMEOUT = 4.0
+MAX_THUMBNAIL_BYTES = 5 * 1024 * 1024  # 5 MiB safety cap
 _THUMBNAIL_SUBDIR = "thumbnails"
 
 
@@ -30,15 +32,17 @@ def cached_path(url, cache_dir):
 def fetch_thumbnail(url, *, cache_dir, timeout=DEFAULT_TIMEOUT):
     if not url:
         return None
+    if urllib.parse.urlsplit(url).scheme not in ("http", "https"):
+        return None
     path = cached_path(url, cache_dir)
     if os.path.isfile(path) and os.path.getsize(path) > 0:
         return path
     try:
         with urllib.request.urlopen(url, timeout=timeout) as resp:
-            body = resp.read()
+            body = resp.read(MAX_THUMBNAIL_BYTES + 1)
     except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, OSError):
         return None
-    if not body:
+    if not body or len(body) > MAX_THUMBNAIL_BYTES:
         return None
     os.makedirs(os.path.dirname(path), exist_ok=True)
     tmp_fd, tmp_path = tempfile.mkstemp(prefix=".thumb-", dir=os.path.dirname(path))

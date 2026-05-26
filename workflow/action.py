@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tempfile
 import urllib.error
+import urllib.parse
 import urllib.request
 
 DEFAULT_TIMEOUT = 10.0
@@ -35,13 +36,16 @@ def detect_format(body):
         return "JPEG"
     if body.startswith(b"GIF87a") or body.startswith(b"GIF89a"):
         return "GIFf"
+    if body[:4] == b"RIFF" and body[8:12] == b"WEBP":
+        return "WEBP"
     return ""
 
 
-def copy_image(url, *, fetcher=None, clipboard=None, notifier=None):
+def copy_image(url, *, fetcher=None, clipboard=None, notifier=None, converter=None):
     fetcher = fetcher or _fetch_image
     clipboard = clipboard or _copy_to_clipboard
     notifier = notifier or _notify
+    converter = converter or _convert_webp_to_png
 
     if not url:
         notifier("Cannot copy image", "No image URL was provided.")
@@ -61,9 +65,17 @@ def copy_image(url, *, fetcher=None, clipboard=None, notifier=None):
     if not fmt:
         notifier(
             "Unsupported image format",
-            "Only PNG, JPEG, and GIF images can be copied to the clipboard.",
+            "Only PNG, JPEG, GIF, and WebP images can be copied to the clipboard.",
         )
         return 1
+
+    if fmt == "WEBP":
+        try:
+            body = converter(body)
+        except ClipboardError as exc:
+            notifier("Clipboard copy failed", str(exc))
+            return 1
+        fmt = "PNGf"
 
     try:
         clipboard(body, fmt)
@@ -91,6 +103,8 @@ def main(argv=None):
 
 
 def _fetch_image(url, *, timeout=DEFAULT_TIMEOUT):
+    if urllib.parse.urlsplit(url).scheme not in ("http", "https"):
+        raise DownloadError("Only http and https image URLs are supported.")
     try:
         with urllib.request.urlopen(url, timeout=timeout) as resp:
             body = resp.read(MAX_IMAGE_BYTES + 1)
@@ -103,6 +117,31 @@ def _fetch_image(url, *, timeout=DEFAULT_TIMEOUT):
     if len(body) > MAX_IMAGE_BYTES:
         raise DownloadError("Image exceeds maximum supported size.")
     return body
+
+
+def _convert_webp_to_png(body):
+    in_fd, in_path = tempfile.mkstemp(prefix="alfred-img-", suffix=".webp")
+    out_path = f"{in_path[: -len('.webp')]}.png"
+    try:
+        with os.fdopen(in_fd, "wb") as f:
+            f.write(body)
+        try:
+            subprocess.run(
+                ["/usr/bin/sips", "-s", "format", "png", in_path, "--out", out_path],
+                check=True,
+                capture_output=True,
+            )
+        except FileNotFoundError as exc:
+            raise ClipboardError("sips binary not found") from exc
+        except subprocess.CalledProcessError as exc:
+            stderr = (exc.stderr or b"").decode("utf-8", errors="replace").strip()
+            raise ClipboardError(stderr or f"sips exited {exc.returncode}") from exc
+        with open(out_path, "rb") as f:
+            return f.read()
+    finally:
+        for path in (in_path, out_path):
+            with contextlib.suppress(OSError):
+                os.unlink(path)
 
 
 _EXT_BY_FORMAT = {"PNGf": ".png", "JPEG": ".jpg", "GIFf": ".gif"}
@@ -133,9 +172,13 @@ def _copy_to_clipboard(body, fmt):
             os.unlink(path)
 
 
+def _applescript_string(text):
+    return text.replace("\\", "\\\\").replace('"', '\\"')
+
+
 def _notify(title, message):
-    safe_title = (title or "Google Image Search").replace('"', "'")
-    safe_message = (message or "").replace('"', "'")
+    safe_title = _applescript_string(title or "Google Image Search")
+    safe_message = _applescript_string(message or "")
     script = f'display notification "{safe_message}" with title "{safe_title}"'
     with contextlib.suppress(FileNotFoundError, subprocess.TimeoutExpired, OSError):
         subprocess.run(

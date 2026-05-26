@@ -78,7 +78,8 @@ debug logs) only see it through the script filter, not through every action.
 3. Use the following actions:
    - **Enter** — Download the selected image and copy its data to the
      clipboard. You can paste it directly into other apps (e.g. Slack,
-     Keynote, Mail). PNG, JPEG, and GIF are supported.
+     Keynote, Mail). PNG, JPEG, GIF, and WebP are supported (WebP is
+     converted to PNG via `sips`).
    - **Shift + Enter** — Open the direct image URL in your default browser.
    - **Cmd + Enter** — Copy the direct image URL as text.
    - **Alt + Enter** — Open the source page that hosts the image.
@@ -114,7 +115,7 @@ debug logs) only see it through the script filter, not through every action.
 | "Google image search failed: API key not valid" | API key is wrong or the Custom Search API is not enabled in your Google Cloud project. | Re-check the key value and confirm the API is enabled. |
 | "Google image search quota reached" | Daily query limit exceeded. | Wait for the quota to reset or upgrade your billing tier. |
 | Results render with broken icons | Network blocked the thumbnail host (`encrypted-tbn0.gstatic.com`). | Allow that domain or rerun the search. Selection actions still work. |
-| "Unsupported image format" notification after Enter | The selected image is something other than PNG, JPEG, or GIF (for example WebP). | Try a different result, or use Shift+Enter to open it in the browser. |
+| "Unsupported image format" notification after Enter | The selected image is something other than PNG, JPEG, GIF, or WebP. | Try a different result, or use Shift+Enter to open it in the browser. |
 | "osascript binary not found" notification | macOS automation tooling is broken. | Reinstall macOS command line tools (`xcode-select --install`). |
 
 ## Development
