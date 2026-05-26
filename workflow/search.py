@@ -19,7 +19,7 @@ def run(query, env):
     config = SearchConfig(
         api_key=(env.get("google_api_key") or "").strip(),
         cse_id=(env.get("google_cse_id") or "").strip(),
-        num=_parse_int(env.get("result_count"), default=10),
+        num=_parse_int(env.get("result_count"), default=12),
         safe=(env.get("safe_search") or "off").strip() or "off",
     )
 

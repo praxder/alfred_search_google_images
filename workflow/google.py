@@ -11,8 +11,9 @@ from dataclasses import dataclass
 
 API_URL = "https://www.googleapis.com/customsearch/v1"
 DEFAULT_TIMEOUT = 8.0
-DEFAULT_NUM_RESULTS = 10
-MAX_NUM_RESULTS = 10
+DEFAULT_NUM_RESULTS = 12
+MAX_NUM_RESULTS = 100
+MAX_PAGE_SIZE = 10
 QUOTA_REASONS = frozenset(
     {
         "quotaExceeded",
@@ -94,12 +95,29 @@ def map_response(payload):
 
 def search_images(query, config, *, timeout=DEFAULT_TIMEOUT):
     validate_config(config)
+    target = _clamp_num(config.num)
+    results = []
+    start = 1
+    while len(results) < target:
+        page_size = min(MAX_PAGE_SIZE, target - len(results))
+        page = _fetch_page(query, config, start=start, num=page_size, timeout=timeout)
+        if not page:
+            break
+        results.extend(page)
+        if len(page) < page_size:
+            break
+        start += page_size
+    return results[:target]
+
+
+def _fetch_page(query, config, *, start, num, timeout):
     params = {
         "key": config.api_key,
         "cx": config.cse_id,
         "q": query,
         "searchType": "image",
-        "num": str(_clamp_num(config.num)),
+        "num": str(num),
+        "start": str(start),
         "safe": config.safe or "off",
     }
     url = f"{API_URL}?{urllib.parse.urlencode(params)}"

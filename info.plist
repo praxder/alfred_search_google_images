@@ -363,16 +363,16 @@ See README.md for full setup instructions.</string>
 			<key>config</key>
 			<dict>
 				<key>default</key>
-				<string>10</string>
+				<string>12</string>
 				<key>placeholder</key>
-				<string>10</string>
+				<string>12</string>
 				<key>required</key>
 				<false/>
 				<key>trim</key>
 				<true/>
 			</dict>
 			<key>description</key>
-			<string>Number of image results to return (1-10).</string>
+			<string>Number of image results to return (1-100). Each block of 10 uses one Google API query.</string>
 			<key>label</key>
 			<string>Result Count</string>
 			<key>type</key>
@@ -416,7 +416,7 @@ See README.md for full setup instructions.</string>
 		<key>google_cse_id</key>
 		<string></string>
 		<key>result_count</key>
-		<string>10</string>
+		<string>12</string>
 		<key>safe_search</key>
 		<string>off</string>
 	</dict>

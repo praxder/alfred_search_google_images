@@ -65,7 +65,7 @@ The workflow exposes configuration via Alfred's workflow configuration UI
 | --- | --- | --- | --- |
 | Google API Key | `google_api_key` | yes | The API key from Google Cloud. Stored as a non-exported variable. |
 | Programmable Search Engine ID | `google_cse_id` | yes | The `cx` value of your image-enabled search engine. |
-| Result Count | `result_count` | no | Number of images to show. The Custom Search API caps this at `10`. Default `10`. |
+| Result Count | `result_count` | no | Number of images to show, `1`–`100`. Each block of 10 uses one Custom Search API query (e.g. `12` = 2 queries). Default `12`. |
 | SafeSearch | `safe_search` | no | `off` or `active`. Default `off`. |
 
 The API key is set as non-exported in `info.plist` so child scripts (and

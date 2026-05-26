@@ -225,19 +225,46 @@ class SearchImagesTests(unittest.TestCase):
         ):
             search_images("cats", SearchConfig(api_key="k", cse_id="c"))
 
-    def test_given_num_out_of_range_when_search_then_clamps_to_one_to_ten(self):
+    def test_given_num_out_of_range_when_search_then_clamps_to_one_to_max(self):
         body = json.dumps({"items": []}).encode("utf-8")
         with patch(
             "workflow.google.urllib.request.urlopen", return_value=_FakeResponse(body)
         ) as opener:
-            search_images("cats", SearchConfig(api_key="k", cse_id="c", num=42))
+            search_images("cats", SearchConfig(api_key="k", cse_id="c", num=500))
         self.assertIn("num=10", opener.call_args.args[0])
+        self.assertIn("start=1", opener.call_args.args[0])
 
         with patch(
             "workflow.google.urllib.request.urlopen", return_value=_FakeResponse(body)
         ) as opener:
             search_images("cats", SearchConfig(api_key="k", cse_id="c", num=0))
         self.assertIn("num=1", opener.call_args.args[0])
+
+    def test_given_num_above_page_size_when_search_then_paginates(self):
+        page1 = json.dumps({"items": [_sample_item(link=f"https://e.com/{i}.jpg") for i in range(10)]}).encode("utf-8")
+        page2 = json.dumps({"items": [_sample_item(link=f"https://e.com/p2-{i}.jpg") for i in range(2)]}).encode("utf-8")
+        responses = [_FakeResponse(page1), _FakeResponse(page2)]
+        with patch(
+            "workflow.google.urllib.request.urlopen", side_effect=responses
+        ) as opener:
+            results = search_images("cats", SearchConfig(api_key="k", cse_id="c", num=12))
+        self.assertEqual(len(results), 12)
+        self.assertEqual(opener.call_count, 2)
+        first_url = opener.call_args_list[0].args[0]
+        second_url = opener.call_args_list[1].args[0]
+        self.assertIn("num=10", first_url)
+        self.assertIn("start=1", first_url)
+        self.assertIn("num=2", second_url)
+        self.assertIn("start=11", second_url)
+
+    def test_given_short_page_when_search_then_stops_paginating(self):
+        page1 = json.dumps({"items": [_sample_item(link=f"https://e.com/{i}.jpg") for i in range(3)]}).encode("utf-8")
+        with patch(
+            "workflow.google.urllib.request.urlopen", return_value=_FakeResponse(page1)
+        ) as opener:
+            results = search_images("cats", SearchConfig(api_key="k", cse_id="c", num=20))
+        self.assertEqual(len(results), 3)
+        self.assertEqual(opener.call_count, 1)
 
 
 if __name__ == "__main__":
