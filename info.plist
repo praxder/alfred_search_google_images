@@ -4,8 +4,6 @@
 <dict>
 	<key>bundleid</key>
 	<string>org.rightnowmedia.alfred.googleimagesearch</string>
-	<key>category</key>
-	<string>Internet</string>
 	<key>connections</key>
 	<dict>
 		<key>A1A1A1A1-1111-1111-1111-111111111111</key>
@@ -128,7 +126,7 @@
 				<integer>0</integer>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.action.runscript</string>
+			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
 			<string>B2B2B2B2-2222-2222-2222-222222222222</string>
 			<key>version</key>
@@ -139,12 +137,14 @@
 			<dict>
 				<key>browser</key>
 				<string></string>
+				<key>skipqueryencode</key>
+				<false/>
+				<key>skipvarencode</key>
+				<false/>
 				<key>spaces</key>
 				<string></string>
 				<key>url</key>
 				<string>{query}</string>
-				<key>utf8</key>
-				<true/>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.action.openurl</string>
@@ -177,12 +177,14 @@
 			<dict>
 				<key>browser</key>
 				<string></string>
+				<key>skipqueryencode</key>
+				<false/>
+				<key>skipvarencode</key>
+				<false/>
 				<key>spaces</key>
 				<string></string>
 				<key>url</key>
 				<string>{query}</string>
-				<key>utf8</key>
-				<true/>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.action.openurl</string>
