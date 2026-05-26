@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>org.rightnowmedia.alfred.googleimagesearch</string>
+	<key>category</key>
+	<string>Internet</string>
+	<key>connections</key>
+	<dict>
+		<key>A1A1A1A1-1111-1111-1111-111111111111</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>B2B2B2B2-2222-2222-2222-222222222222</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>C3C3C3C3-3333-3333-3333-333333333333</string>
+				<key>modifiers</key>
+				<integer>131072</integer>
+				<key>modifiersubtext</key>
+				<string>Open image URL</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>D4D4D4D4-4444-4444-4444-444444444444</string>
+				<key>modifiers</key>
+				<integer>1048576</integer>
+				<key>modifiersubtext</key>
+				<string>Copy image URL</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>E5E5E5E5-5555-5555-5555-555555555555</string>
+				<key>modifiers</key>
+				<integer>524288</integer>
+				<key>modifiersubtext</key>
+				<string>Open source page</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>Adam Smith</string>
+	<key>description</key>
+	<string>Search Google Images and view results in Alfred Grid View. Enter copies the image, Shift+Enter opens it, Cmd+Enter copies its URL, Alt+Enter opens the source page.</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>Google Image Search (Grid View)</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>gimg</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Searching Google Images…</string>
+				<key>script</key>
+				<string>/usr/bin/python3 -m workflow.search "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string>Search Google Images and pick a result</string>
+				<key>title</key>
+				<string>Search Google Images</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>A1A1A1A1-1111-1111-1111-111111111111</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>/usr/bin/python3 -m workflow.action copy-image "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.runscript</string>
+			<key>uid</key>
+			<string>B2B2B2B2-2222-2222-2222-222222222222</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>browser</key>
+				<string></string>
+				<key>spaces</key>
+				<string></string>
+				<key>url</key>
+				<string>{query}</string>
+				<key>utf8</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.openurl</string>
+			<key>uid</key>
+			<string>C3C3C3C3-3333-3333-3333-333333333333</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>D4D4D4D4-4444-4444-4444-444444444444</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>browser</key>
+				<string></string>
+				<key>spaces</key>
+				<string></string>
+				<key>url</key>
+				<string>{query}</string>
+				<key>utf8</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.openurl</string>
+			<key>uid</key>
+			<string>E5E5E5E5-5555-5555-5555-555555555555</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string>Google Image Search workflow for Alfred.
+
+Configure your Google Custom Search JSON API key and Programmable Search Engine ID in the workflow's configuration before use.
+
+Usage:
+  gimg &lt;query&gt;     Search Google Images and view results in Grid View
+  Enter            Copy the selected image to the clipboard
+  Shift+Enter      Open the direct image URL in your browser
+  Cmd+Enter        Copy the direct image URL as text
+  Alt+Enter        Open the source page in your browser
+
+See README.md for full setup instructions.</string>
+	<key>uidata</key>
+	<dict>
+		<key>A1A1A1A1-1111-1111-1111-111111111111</key>
+		<dict>
+			<key>xpos</key>
+			<integer>40</integer>
+			<key>ypos</key>
+			<integer>180</integer>
+		</dict>
+		<key>B2B2B2B2-2222-2222-2222-222222222222</key>
+		<dict>
+			<key>xpos</key>
+			<integer>320</integer>
+			<key>ypos</key>
+			<integer>40</integer>
+		</dict>
+		<key>C3C3C3C3-3333-3333-3333-333333333333</key>
+		<dict>
+			<key>xpos</key>
+			<integer>320</integer>
+			<key>ypos</key>
+			<integer>150</integer>
+		</dict>
+		<key>D4D4D4D4-4444-4444-4444-444444444444</key>
+		<dict>
+			<key>xpos</key>
+			<integer>320</integer>
+			<key>ypos</key>
+			<integer>260</integer>
+		</dict>
+		<key>E5E5E5E5-5555-5555-5555-555555555555</key>
+		<dict>
+			<key>xpos</key>
+			<integer>320</integer>
+			<key>ypos</key>
+			<integer>370</integer>
+		</dict>
+	</dict>
+	<key>userconfigurationconfig</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+				<key>placeholder</key>
+				<string>AIza…</string>
+				<key>required</key>
+				<true/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Your Google Custom Search JSON API key. See README.md for setup instructions.</string>
+			<key>label</key>
+			<string>Google API Key</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>google_api_key</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+				<key>placeholder</key>
+				<string>e.g. 1234567890abcdef:xyz</string>
+				<key>required</key>
+				<true/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>The cx value for your Programmable Search Engine with Image Search enabled.</string>
+			<key>label</key>
+			<string>Programmable Search Engine ID</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>google_cse_id</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>10</string>
+				<key>placeholder</key>
+				<string>10</string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Number of image results to return (1-10).</string>
+			<key>label</key>
+			<string>Result Count</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>result_count</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>off</string>
+				<key>pairs</key>
+				<array>
+					<array>
+						<string>Off</string>
+						<string>off</string>
+					</array>
+					<array>
+						<string>Moderate</string>
+						<string>active</string>
+					</array>
+				</array>
+				<key>required</key>
+				<false/>
+			</dict>
+			<key>description</key>
+			<string>SafeSearch level for image results.</string>
+			<key>label</key>
+			<string>SafeSearch</string>
+			<key>type</key>
+			<string>popupbutton</string>
+			<key>variable</key>
+			<string>safe_search</string>
+		</dict>
+	</array>
+	<key>variables</key>
+	<dict>
+		<key>google_api_key</key>
+		<string></string>
+		<key>google_cse_id</key>
+		<string></string>
+		<key>result_count</key>
+		<string>10</string>
+		<key>safe_search</key>
+		<string>off</string>
+	</dict>
+	<key>variablesdontexport</key>
+	<array>
+		<string>google_api_key</string>
+	</array>
+	<key>version</key>
+	<string>0.1.0</string>
+	<key>webaddress</key>
+	<string></string>
+</dict>
+</plist>

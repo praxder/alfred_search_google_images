@@ -1,0 +1,16 @@
+[project]
+name = "alfred-google-image-search"
+version = "0.1.0"
+description = "Alfred workflow that searches Google Images and renders results in Grid View."
+requires-python = ">=3.9"
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
